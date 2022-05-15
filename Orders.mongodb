@@ -1,0 +1,112 @@
+use('ProiectECBD');
+
+db.Orders.drop();
+
+var users = db.Users.find({}).toArray();
+var products = db.Products.find({}).toArray();
+
+db.createCollection('Orders', {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["user", "products", "order_date", "status"],
+            properties: {
+                user: {
+                    bsonType: "object",
+                    description: "Must be an object and is required"
+                },
+
+                products: {
+                  bsonType: "array",
+                  required: ["product", "quantity"],
+                  properties: {
+                    product: {
+                        bsonType: "object",
+                        description: "Must be an object and is required"
+                    },
+
+                    quantity: {
+                        bsonType: "int",
+                        minimum: 0,
+                        description: "Must be a integer and is required"
+                    }
+                  }
+                },
+
+                order_date: {
+                  bsonType: "date",
+                  description: "Must be a date and is required"
+                },
+
+                status: {
+                  enum: ["Pending", "In progress", "Done"],
+                  description: "Can only be one of the enum values and is required"
+                }
+            }
+        }
+    }
+});
+
+db.Orders.insertMany([
+      {
+        'user': users[1],
+        'products': [
+          {
+            'product': products[1],
+            'quantity': 2
+          },
+          {
+            'product': products[2],
+            'quantity': 5
+          }
+        ],
+        'order_date': new Date(2019, 3, 10, 12, 05),
+        'status': 'Pending'
+      },
+
+      {
+        'user': users[2],
+        'products': [
+          {
+            'product': products[1],
+            'quantity': 4
+          },
+          {
+            'product': products[3],
+            'quantity': 1
+          }
+        ],
+        'order_date': new Date(2021, 6, 05, 14, 09),
+        'status': 'Pending'
+      },      
+      
+      {
+        'user': users[3],
+        'products': [
+          {
+            'product': products[5],
+            'quantity': 1
+          },
+          {
+            'product': products[1],
+            'quantity': 2
+          }
+        ],
+        'order_date': new Date(2020, 1, 15, 09, 20),
+        'status': 'Pending'
+      },
+
+      {
+        'user': users[4],
+        'products': [
+          {
+            'product': products[4],
+            'quantity': 4
+          }
+        ],
+        'order_date': new Date(2020, 12, 21, 15, 40),
+        'status': 'Pending'
+      },
+]);
+
+db.Orders.find({});

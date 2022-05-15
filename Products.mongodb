@@ -1,0 +1,116 @@
+use('ProiectECBD');
+
+db.Products.drop();
+
+db.createCollection('Products', {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["_id", "name", "price"],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    minimum: 1,
+                    description: "Must be an integer greater than 0 and is required"
+                },
+
+                name: {
+                    bsonType: "string",
+                    minLength: 3,
+                    description: "Must be a string and is required"
+                },
+
+                price: {
+                  bsonType: ["double", "int"],
+                  minimum: 0,
+                  description: "Must be a double and is required"
+                }
+            }
+        }
+    }
+});
+
+db.Products.insertMany([
+  {
+    '_id': 1,
+    'name': 'Hanorac',
+    'price': 70,
+    'size': 'L',
+    'color': 'negru',
+    'cateogry': 'imbracaminte',
+    'brand': 'Nike'
+  },
+
+  {
+    '_id': 2,
+    'name': 'Hanorac',
+    'price': 70,
+    'size': 'XL',
+    'color': 'negru',
+    'cateogry': 'imbracaminte',
+    'brand': 'Nike'
+  },
+
+  {
+    '_id': 3,
+    'name': 'Hanorac',
+    'price': 69.99,
+    'size': 'M',
+    'color': 'albastru',
+    'cateogry': 'imbracaminte',
+    'brand': 'Nike'
+  },
+
+  {
+    '_id': 4,
+    'name': 'Hanorac',
+    'price': 69.99,
+    'size': 'M',
+    'color': 'visiniu',
+    'cateogry': 'imbracaminte',
+    'brand': 'Nike'
+  },
+
+  {
+    '_id': 5,
+    'name': 'Tricou',
+    'price': 35,
+    'size': 'M',
+    'color': 'negru',
+    'cateogry': 'imbracaminte',
+    'brand': 'Adidas'
+  },
+
+  {
+    '_id': 6,
+    'name': 'Laptop',
+    'price': 3599,
+    'color': 'negru',
+    'cateogry': 'hardware',
+    'brand': 'Lenovo',
+    'processor': 'i5-9980K',
+    'RAM': 16,
+    'memory type': 'DDR4',
+    'frequency': '2400 MHZ',
+    'storage type': 'SSD',
+    'SSD capacity': '526 GB',
+    'video card type': 'integrata',
+  },
+
+  {
+    '_id': 7,
+    'name': 'Laptop',
+    'price': 5499,
+    'color': 'alb',
+    'cateogry': 'hardware',
+    'brand': 'Apple',
+    'processor': 'Apple M1',
+    'RAM': 8,
+    'memory type': 'LPDDR4X',
+    'storage type': 'SSD',
+    'SSD capacity': '256 GB',
+    'video card type': 'integrata',
+  }
+]);
+
+db.Products.find({});

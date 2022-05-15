@@ -1,0 +1,103 @@
+use('ProiectECBD');
+
+db.Users.drop();
+
+db.createCollection('Users', {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["_id", "username", "email"],
+            properties: {
+                _id: {
+                    bsonType: "int",
+                    minimum: 1,
+                    description: "Must be an integer greater than 0 and is required"
+                },
+
+                username: {
+                    bsonType: "string",
+                    minLength: 5,
+                    maxLength: 30,
+                    description: "must be a string and is required"
+                },
+
+                email: {
+                    bsonType: "string",
+                    pattern : "^.+\@.+$",
+                    description: "must be a string and match the regular expression pattern"
+                },
+
+                firstName: {
+                    bsonType: "string",
+                    minLength: 4,
+                    maxLength: 30,
+                    pattern: "[a-zA-Z]+",
+                    description: "must be a string and is not required"
+                },
+
+                lastName: {
+                    bsonType: "string",
+                    minLength: 4,
+                    maxLength: 30,
+                    description: "must be a string and is not required"
+                },
+
+                isAdmin: {
+                    bsonType: "bool",
+                    description: "must be a boolean and is not required"
+                }
+            }
+        }
+    }
+});
+
+function insertAdmin(_id, username, email) {
+    var isInserted = db.Users.insertOne(
+        {
+            '_id': _id,
+            'username': username,
+            'email': email,
+            'isAdmin': true
+        }
+    );
+
+    if (isInserted.acknowledged == true) {
+        let message = `Admin with username ${username} and email ${email} was succesfully created with id ${isInserted.insertedId}`;
+        console.log(message);
+    } else {
+        let message = `Something happened when tried to insert admin with username: ${username}`;
+        console.log(message);
+    }
+}
+
+function insertOneByOneCustom(id, username, first_name, last_name, email) {
+    var isInserted = db.Users.insertOne(
+        {
+            '_id': id,
+            'username': username,
+            'firstName': first_name,
+            'lastName': last_name,
+            'email': email
+        }
+    );
+
+    if (isInserted.acknowledged == true) {
+        let message = `Username ${username} with email ${email} was succesfully created with id ${isInserted.insertedId}`;
+        console.log(message);
+    } else {
+        let message = `Something happened when tried to insert: ${username}`;
+        console.log(message);
+    }
+};
+
+insertAdmin(1, 'admin', 'admin@technical-owner.com');
+insertOneByOneCustom(2, 'gigelfrone', 'Gigel', 'Frone', 'gigelfrone@gmail.com');
+insertOneByOneCustom(3, 'alexandruzbereanu', 'Alexandru', 'Zbereanu', 'alexzbereanu@gmail.com');
+insertOneByOneCustom(4, 'iulianprelipcean', 'Iulian', 'Prelipcean', 'iulianprelipcean@gmail.com');
+insertOneByOneCustom(5, 'silviubutnaru', 'Silviu', 'Butnaru', 'silviubutnaru@gmail.com');
+insertOneByOneCustom(6, 'johnbaltariu', 'John', 'Baltariu', 'johnbaltariu@gmail.com');
+
+db.Users.find({});
+
+// testing inserts for $jsonSchema
+// TO DO
