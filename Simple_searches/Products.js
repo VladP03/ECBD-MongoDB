@@ -52,3 +52,19 @@ db.Products.find({
     { price: { $gte: 1500, $lte: 7500 } },
   ],
 });
+
+// Show a list of 2 products from category "Laptop, Tablete & Telefoane", page 2
+function printProducts(pageNumber, nrPerPage) {
+  console.log("Page: " + pageNumber + " with: " + nrPerPage + " per page");
+
+  db.Products.find()
+    .sort({ _id: 1 })
+    .skip(pageNumber > 0 ? (pageNumber - 1) * nrPerPage : 0)
+    .limit(nrPerPage)
+    .forEach((product) => {
+      print(product._id + ": " + product.name);
+    });
+}
+
+use("ProiectECBD");
+printProducts(2, 2);
