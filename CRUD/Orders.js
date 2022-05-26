@@ -70,8 +70,8 @@ db.Orders.insertMany([
         quantity: 2,
       },
     ],
-    order_date: new Date(2017, 10, 14, 19, 05),
-    status: "Done",
+    order_date: new Date(2021, 10, 14, 19, 05),
+    status: "In progress",
   },
 
   {
@@ -95,7 +95,7 @@ db.Orders.insertMany([
       },
     ],
     order_date: new Date(2020, 4, 21, 8, 08),
-    status: "Done",
+    status: "Pending",
   },
 ]);
 
